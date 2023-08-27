@@ -7,11 +7,11 @@ public:
     Layer();
     Layer(int nbOfInput, int nbOfOutput);
     ~Layer();
-    double* calculateLayerOutput(double* inputs);
+    std::vector<double> calculateLayerOutput(std::vector<double> inputs);
 
 private:
     int inputNB;
     int outputNB;
-    double** weights; //later to be optimized
-    double* biases;
+    std::vector<std::vector<double>> weights; 
+    std::vector<double> biases;
 };

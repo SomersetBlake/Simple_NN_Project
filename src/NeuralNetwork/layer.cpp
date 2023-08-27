@@ -1,23 +1,28 @@
 #include "../../include/NeuralNetwork/layer.h"
+#include <vector>
 
-    Layer::Layer(){};
+    Layer::Layer(){
+    };
+
     Layer::Layer(int nbOfInput, int nbOfOutput):inputNB(nbOfInput),outputNB(nbOfOutput){
-        weights = new double*[inputNB];
-        for(int i=0; i<inputNB;i++){
-            weights[i] = new double[outputNB];
+        std::vector<double> tempVec;
+        for(int i=0; i<inputNB; i++){
+            for(int k=0; k<outputNB; k++){
+                tempVec.push_back(0);
+            }
+            weights.push_back(tempVec);
         }
-        biases = new double[outputNB];
     }
     
-    double* Layer::calculateLayerOutput(double* inputs){
-        double* calculatedOutput = new double[outputNB];
-        for(int outgoingNode =0; outgoingNode <outputNB; outgoingNode++){
-            calculatedOutput[outgoingNode] = biases[outgoingNode];
+    std::vector<double> Layer::calculateLayerOutput(std::vector<double> inputs){
 
-            for(int incomingNode = 0; incomingNode < inputNB; incomingNode++){
-                weights[incomingNode][outgoingNode] = 0;
+        std::vector<double> calculatedOutput;
+        std::cout<<"CalculateLayerOut input: "<<inputNB<<" Output: "<<outputNB<<std::endl;
+        for(int outgoingNode = 0; outgoingNode < outputNB; outgoingNode++){
+            biases.push_back(0);
+            calculatedOutput.push_back(biases[outgoingNode]);
+            for(int incomingNode = 0; incomingNode < inputNB -1; incomingNode++){
                 GLOBAL::weights.push_back(weights[incomingNode][outgoingNode]);
-                std::cout<<"Pushed"<<std::endl;
                 calculatedOutput[outgoingNode] += inputs[incomingNode] * weights[incomingNode][outgoingNode];
             }
         }
@@ -25,10 +30,6 @@
         return calculatedOutput;
     }
 
-    Layer::~Layer(){
-        for(int i=0; i<inputNB; i++){
-            delete weights[i];
-        }
-        delete weights;
-        delete biases;
+        Layer::~Layer(){
+
     }

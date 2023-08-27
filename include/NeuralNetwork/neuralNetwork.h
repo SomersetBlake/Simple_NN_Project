@@ -9,9 +9,9 @@ public:
     NeuralNetwork();
     NeuralNetwork(int nbOfLayers, ...);
     ~NeuralNetwork();
-    double* calculateOutputs(double* inputs);
+    std::vector<double> calculateOutputs(std::vector<double> inputs);
 
 private:
-    Layer* layers;
+    std::vector<Layer> layers;
     int nbOfLayers;
 };
