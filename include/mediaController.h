@@ -16,6 +16,7 @@ public:
     void run();
 
     void setGraphSize(int x1, int x2, int x3, int x4);
+    int classifyColor(int x, int y);
     int getGraph_leftCorner();
     int getGraph_rightCorner();
     int getGraph_bottomRCorner();

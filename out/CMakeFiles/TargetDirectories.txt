@@ -1,3 +1,3 @@
-/home/mujonoga/Programowanie/SDL/Simple_NN_Project/out/CMakeFiles/TEST.dir
-/home/mujonoga/Programowanie/SDL/Simple_NN_Project/out/CMakeFiles/edit_cache.dir
-/home/mujonoga/Programowanie/SDL/Simple_NN_Project/out/CMakeFiles/rebuild_cache.dir
+/home/mujonoga/Programowanie/SDL/Simple_NN_Project/Simple_NN_Project/out/CMakeFiles/TEST.dir
+/home/mujonoga/Programowanie/SDL/Simple_NN_Project/Simple_NN_Project/out/CMakeFiles/edit_cache.dir
+/home/mujonoga/Programowanie/SDL/Simple_NN_Project/Simple_NN_Project/out/CMakeFiles/rebuild_cache.dir

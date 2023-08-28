@@ -1,4 +1,4 @@
-# Install script for directory: /home/mujonoga/Programowanie/SDL/Simple_NN_Project
+# Install script for directory: /home/mujonoga/Programowanie/SDL/Simple_NN_Project/Simple_NN_Project
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mujonoga/Programowanie/SDL/Simple_NN_Project/out/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/mujonoga/Programowanie/SDL/Simple_NN_Project/Simple_NN_Project/out/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "../TEST"
-  "../TEST.pdb"
+  "/home/mujonoga/Programowanie/SDL/Simple_NN_Project/Simple_NN_Project/TEST"
+  "/home/mujonoga/Programowanie/SDL/Simple_NN_Project/Simple_NN_Project/TEST.pdb"
   "CMakeFiles/TEST.dir/imgui/imgui.cpp.o"
   "CMakeFiles/TEST.dir/imgui/imgui.cpp.o.d"
   "CMakeFiles/TEST.dir/imgui/imgui_demo.cpp.o"

@@ -8,6 +8,7 @@
     void Point::setCoords(int _x, int _y){
         x_length = _x;
         y_length = _y;
+        calculateDanger();
     }
 
     void Point::calculateDanger(){

@@ -14,9 +14,6 @@ MediaController::MediaController(){
     app = new Media();
     app->init("Graph", 1440, 720);
     setGraphSize(Media::SCREEN_WIDTH*0.1, Media::SCREEN_HEIGHT*0.1, Media::SCREEN_WIDTH*0.9, Media::SCREEN_HEIGHT*0.9);
-
-    for(int i=0; i<5; i++)
-    GLOBAL::weights.push_back(0.1);
 }
 
 MediaController::~MediaController(){
@@ -90,18 +87,24 @@ void MediaController::drawCircles(){
     int circleSize = x_offset/8;
     int xStart = graphRect.x_left + circleSize;
     int yStart = graphRect.y_left + circleSize;
+    int currentX;
+    int currentY;
 
     for(int i=0; i<GLOBAL::x_max * GLOBAL::y_max; i++){
-            if(points[i%GLOBAL::x_max][i/GLOBAL::x_max]->isDangerous()){
-                colour = {255,0,0,255};
-            }else {
-                colour = {255,255,255,255};
-            }
-            SDL_Rect circlePos = {xStart + xPos,yStart + yPos,circleSize,circleSize};
-            circles[i] = new ScreenGeometry(ScreenGeometry::geometryType::FILL_CIRCLE,circlePos,colour);
-            objects.push_back(circles[i]);
-            xPos = x_offset * (i%GLOBAL::x_max);
-            yPos = y_offset * (i/GLOBAL::x_max);
+        currentX =   i%GLOBAL::x_max;
+        currentY = i/GLOBAL::x_max;
+        
+        points[currentX][currentY]->setCoords(xStart+xPos, yStart+yPos);
+        if(points[currentX][currentY]->isDangerous()){
+            colour = {255,0,0,255};
+        }else {
+            colour = {255,255,255,255};
+        }
+        SDL_Rect circlePos = {xStart + xPos,yStart + yPos,circleSize,circleSize};
+        circles[i] = new ScreenGeometry(ScreenGeometry::geometryType::FILL_CIRCLE,circlePos,colour);
+        objects.push_back(circles[i]);
+        xPos = x_offset * (currentX);
+        yPos = y_offset * (currentY);
     }//for
 }
 
@@ -120,6 +123,13 @@ void MediaController::setGraphSize(int x1, int y1, int x2, int y2){
     graphRect.height = graphRect.y_right - graphRect.y_left;
 }
 
+int MediaController::classifyColor(int x, int y){
+    double output1 =  GLOBAL::biases[0] + x*GLOBAL::weights[0] + y*GLOBAL::weights[1];
+    double output2 =  GLOBAL::biases[1] + x*GLOBAL::weights[2] + y*GLOBAL::weights[3];
+
+    return (output1>output2)?1:0;
+}
+
 void MediaController::graphTest(){
     int rectSize = 4;
     int startX = graphRect.x_left - rectSize;
@@ -128,7 +138,7 @@ void MediaController::graphTest(){
     SDL_SetRenderDrawColor(Media::ren, 255, 0, 0, 50);
     for(int i = startX; i<graphRect.x_right-rectSize; i+=rectSize){
         for(int k =startY; k<graphRect.y_right-rectSize;k+=rectSize){
-            if(i >= k * GLOBAL::weights[0] * 10 * GLOBAL::weights[1] + GLOBAL::weights[2] * 500 )SDL_SetRenderDrawColor(Media::ren, 255, 0, 0, 50);
+            if( classifyColor(i, k))SDL_SetRenderDrawColor(Media::ren, 255, 0, 0, 50);
             else SDL_SetRenderDrawColor(Media::ren, 255, 255, 255, 50);
             SDL_Rect tempRect = {i,k,rectSize,rectSize};
             SDL_RenderFillRect(Media::ren, &tempRect);
