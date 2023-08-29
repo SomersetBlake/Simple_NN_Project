@@ -1,11 +1,4 @@
 #include "../include/mediaController.h"
-#include <SDL2/SDL_blendmode.h>
-#include <SDL2/SDL_hints.h>
-#include <SDL2/SDL_pixels.h>
-#include <SDL2/SDL_rect.h>
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_stdinc.h>
-#include <SDL2/SDL_timer.h>
 #include <cstdint>
 #include <time.h>
 #include <cstdlib>
@@ -14,6 +7,8 @@ MediaController::MediaController(){
     app = new Media();
     app->init("Graph", 1440, 720);
     setGraphSize(Media::SCREEN_WIDTH*0.1, Media::SCREEN_HEIGHT*0.1, Media::SCREEN_WIDTH*0.9, Media::SCREEN_HEIGHT*0.9);
+    
+    testNetwork = NeuralNetwork(3,2,3,2);
 }
 
 MediaController::~MediaController(){
@@ -53,6 +48,7 @@ void MediaController::renderObjects(){
         objects[i]->render();
     }
     rightMenu.render();
+    testNetwork.updateWeights();
     graphTest();
     SDL_RenderPresent(Media::ren);
 }
@@ -124,25 +120,29 @@ void MediaController::setGraphSize(int x1, int y1, int x2, int y2){
 }
 
 int MediaController::classifyColor(int x, int y){
-    double output1 =  GLOBAL::biases[0] + x*GLOBAL::weights[0] + y*GLOBAL::weights[1];
-    double output2 =  GLOBAL::biases[1] + x*GLOBAL::weights[2] + y*GLOBAL::weights[3];
+    std::vector<double> coords = {(double)x,(double)y};
+    int output = testNetwork.classifyOutput(coords);
 
-    return (output1>output2)?1:0;
+    return output;
 }
 
 void MediaController::graphTest(){
-    int rectSize = 4;
-    int startX = graphRect.x_left - rectSize;
-    int startY = graphRect.y_left - rectSize;
+    int xCount = GLOBAL::x_max * 8;
+    int yCount = GLOBAL::y_max * 8;
+    int rectXSize = graphRect.width/xCount;
+    int rectYSize = graphRect.height/yCount;
+    int startX = graphRect.x_left - rectXSize;
+    int startY = graphRect.y_left - rectYSize;
+    SDL_Rect tempRect = {0,0,rectXSize,rectYSize};
+
     SDL_SetRenderDrawBlendMode(Media::ren, SDL_BLENDMODE_BLEND);
-    SDL_SetRenderDrawColor(Media::ren, 255, 0, 0, 50);
-    for(int i = startX; i<graphRect.x_right-rectSize; i+=rectSize){
-        for(int k =startY; k<graphRect.y_right-rectSize;k+=rectSize){
-            if( classifyColor(i, k))SDL_SetRenderDrawColor(Media::ren, 255, 0, 0, 50);
-            else SDL_SetRenderDrawColor(Media::ren, 255, 255, 255, 50);
-            SDL_Rect tempRect = {i,k,rectSize,rectSize};
+    for(int i=0; i<xCount ; i++){
+        for(int k=0; k<yCount; k++){
+            if(classifyColor(i, k))SDL_SetRenderDrawColor(Media::ren, 255, 255, 255, 50);
+            else SDL_SetRenderDrawColor(Media::ren, 255, 0, 0, 50);
+            tempRect.x = i * rectXSize + startX;
+            tempRect.y = k * rectYSize + startY;
             SDL_RenderFillRect(Media::ren, &tempRect);
         }
     }
-
 }

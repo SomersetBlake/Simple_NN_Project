@@ -9,9 +9,12 @@ public:
     NeuralNetwork();
     NeuralNetwork(int nbOfLayers, ...);
     ~NeuralNetwork();
-    std::vector<double> calculateOutputs(std::vector<double> inputs);
+    int classifyOutput(std::vector<double> inputs);
+    void updateWeights();
 
 private:
     std::vector<Layer> layers;
     int nbOfLayers;
+
+    std::vector<double> calculateOutputs(std::vector<double> inputs);
 };

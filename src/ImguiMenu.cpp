@@ -39,8 +39,10 @@ void ImguiMenu::setAlign(float x1, float y1, float width, float height){
 void ImguiMenu::setItems(){
     if(ImGui::Button("Click Me", ImVec2(ImGui::GetWindowSize().x * 0.9,20)))
         std::cout<<"I was clicked"<<std::endl;
-    double v_min = -1;
-    double v_max = 1;
+    double v_min = -25;
+    double v_max = 25;
+    double b_min = -25;
+    double b_max = 25;
     std::string weightLabel = "Weight ";
     for(int i=0; i<GLOBAL::weights.size();i++){
         weightLabel += i;
@@ -50,6 +52,15 @@ void ImguiMenu::setItems(){
         weightLabel = "Weight ";
         ImGui::Spacing();
     }       
+        weightLabel = "Bias ";
+    for(int i=0; i<GLOBAL::biases.size();i++){
+        weightLabel += i;
+        ImGui::PushItemWidth(menuSize.x *0.9);
+        ImGui::Text("Bias %d: ",i);
+        ImGui::SliderScalar(weightLabel.c_str(), ImGuiDataType_Double, &GLOBAL::biases[i], &b_min, &b_max);
+        weightLabel = "Bias ";
+        ImGui::Spacing();
+    }          
     
     ImGui::Spacing();
     ImGui::Spacing();

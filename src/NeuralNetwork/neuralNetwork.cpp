@@ -3,6 +3,9 @@
 NeuralNetwork::NeuralNetwork(){
 }
 
+NeuralNetwork::~NeuralNetwork(){
+}
+
 NeuralNetwork::NeuralNetwork(int nbOfLayers, ...):nbOfLayers(nbOfLayers){
     va_list nodes;
     va_start(nodes, nbOfLayers);
@@ -25,5 +28,33 @@ std::vector<double> NeuralNetwork::calculateOutputs(std::vector<double> inputs){
     return outputs;
 }
 
-NeuralNetwork::~NeuralNetwork(){
+
+int NeuralNetwork::classifyOutput(std::vector<double> inputs){
+    int index = 0;
+    std::vector<double> output = calculateOutputs(inputs);
+    double max = output[0];
+    for(int i=1 ; i<output.size(); i++){
+        if(max < output[i]){
+            max = output[i];
+            index = i;
+        }
+    }
+    return index;
+}
+
+void NeuralNetwork::updateWeights(){
+    int biasesIndex = 0;
+    int weightIndex = 0;
+    for(int i=0; i<nbOfLayers; i++){
+        int layerInput = layers[i].getInputNB();
+        int layerOutput = layers[i].getOutputNB();
+        for(int out=0; out<layerOutput; out++){
+            layers[i].setBiases(out, GLOBAL::biases[biasesIndex]);
+            biasesIndex++;
+            for(int in = 0; in < layerInput; in++){
+                layers[i].setWeights(in, out, GLOBAL::weights[weightIndex]);
+                weightIndex++;
+            }
+        }
+    }
 }
