@@ -39,6 +39,13 @@ void ImguiMenu::setAlign(float x1, float y1, float width, float height){
 void ImguiMenu::setItems(){
     if(ImGui::Button("Click Me", ImVec2(ImGui::GetWindowSize().x * 0.9,20)))
         std::cout<<"I was clicked"<<std::endl;
+    
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Text("Average Cost:");
+    ImGui::Text("%f",GLOBAL::AverageCost);
+    ImGui::Text("%d / %d",GLOBAL::NeuralData,GLOBAL::ExpectedData);
+
     double v_min = -25;
     double v_max = 25;
     double b_min = -25;

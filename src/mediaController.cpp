@@ -72,6 +72,7 @@ void MediaController::drawCircles(){
     for(int i=0;i<GLOBAL::x_max*GLOBAL::y_max;i++){
         points[i%GLOBAL::x_max][i/GLOBAL::x_max] = new Point(i%GLOBAL::x_max,i/GLOBAL::x_max);
     }
+    int expectedPoints = 0;
 
     //Circle data
     ScreenGeometry* circles[GLOBAL::x_max * GLOBAL::y_max] ;
@@ -89,19 +90,24 @@ void MediaController::drawCircles(){
     for(int i=0; i<GLOBAL::x_max * GLOBAL::y_max; i++){
         currentX =   i%GLOBAL::x_max;
         currentY = i/GLOBAL::x_max;
-        
-        points[currentX][currentY]->setCoords(xStart+xPos, yStart+yPos);
+        xPos = x_offset * (currentX);
+        yPos = y_offset * (currentY);
+
+        std::cout<<"CurrentX: "<<currentX<<" CurrentY: "<<currentY<<std::endl;
+        points[currentX][currentY]->setCoords(currentX, currentY);
+        dataPoints.push_back(*(points[currentX][currentY]));
         if(points[currentX][currentY]->isDangerous()){
             colour = {255,0,0,255};
+            expectedPoints++;
         }else {
             colour = {255,255,255,255};
         }
-        SDL_Rect circlePos = {xStart + xPos,yStart + yPos,circleSize,circleSize};
+        SDL_Rect circlePos = {xStart + xPos - circleSize * 4,yStart + yPos - circleSize * 4,circleSize,circleSize};
         circles[i] = new ScreenGeometry(ScreenGeometry::geometryType::FILL_CIRCLE,circlePos,colour);
         objects.push_back(circles[i]);
-        xPos = x_offset * (currentX);
-        yPos = y_offset * (currentY);
-    }//for
+            }//for
+    
+    GLOBAL::ExpectedData = expectedPoints;
 }
 
 int MediaController::getGraph_leftCorner(){ return graphRect.x_left;}
@@ -122,27 +128,39 @@ void MediaController::setGraphSize(int x1, int y1, int x2, int y2){
 int MediaController::classifyColor(int x, int y){
     std::vector<double> coords = {(double)x,(double)y};
     int output = testNetwork.classifyOutput(coords);
-
     return output;
 }
 
 void MediaController::graphTest(){
-    int xCount = GLOBAL::x_max * 8;
-    int yCount = GLOBAL::y_max * 8;
+    int xCount = GLOBAL::x_max ;
+    int yCount = GLOBAL::y_max ;
     int rectXSize = graphRect.width/xCount;
     int rectYSize = graphRect.height/yCount;
     int startX = graphRect.x_left - rectXSize;
     int startY = graphRect.y_left - rectYSize;
     SDL_Rect tempRect = {0,0,rectXSize,rectYSize};
+    int redPoints = 0;
 
     SDL_SetRenderDrawBlendMode(Media::ren, SDL_BLENDMODE_BLEND);
     for(int i=0; i<xCount ; i++){
         for(int k=0; k<yCount; k++){
-            if(classifyColor(i, k))SDL_SetRenderDrawColor(Media::ren, 255, 255, 255, 50);
-            else SDL_SetRenderDrawColor(Media::ren, 255, 0, 0, 50);
+            if(classifyColor(i, k)){
+                SDL_SetRenderDrawColor(Media::ren, 255, 255, 255, 50);
+            }
+            else{
+                SDL_SetRenderDrawColor(Media::ren, 255, 0, 0, 50);
+                redPoints++;
+            }
             tempRect.x = i * rectXSize + startX;
             tempRect.y = k * rectYSize + startY;
             SDL_RenderFillRect(Media::ren, &tempRect);
         }
     }
+    GLOBAL::NeuralData = redPoints;
+    GLOBAL::AverageCost = testNetwork.networkCost(dataPoints);
+}
+
+
+void MediaController::graphCost(){
+    
 }

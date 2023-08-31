@@ -36,9 +36,14 @@
             }
             calculatedOutput[outgoingNode] = activationFunction(calculatedOutput[outgoingNode]);
         }
-
         return calculatedOutput;
     }
+
+    double Layer::cost(double calculatedOutput, double expectedOutput){
+        double cost = expectedOutput - calculatedOutput;
+        return cost*cost;
+    }
+
 
     double Layer::activationFunction(double weightedOutput){
         return (1/(1+exp(-1*weightedOutput)));

@@ -24,7 +24,7 @@ public:
     int getGraph_bottomLCorner();
     int getGraph_width();
     int getGraph_height();
-    
+    void graphCost();
     
     //Graph network
     
@@ -33,6 +33,7 @@ private:
     Media* app;
     SDL_Event event;
     std::vector<ScreenObject*> objects;
+    std::vector<Point> dataPoints;
     ImguiMenu rightMenu;
     struct {
         int x_left;

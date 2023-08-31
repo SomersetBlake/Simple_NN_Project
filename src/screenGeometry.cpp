@@ -1,6 +1,7 @@
 #include "../include/screenGeometry.h"
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_stdinc.h>
+#include <cmath>
 
 ScreenGeometry::ScreenGeometry(uint8_t type, SDL_Rect dst, SDL_Color color):type(type),dst(dst),color(color){
     drawShape();
@@ -56,7 +57,7 @@ void ScreenGeometry::draw_Line(){
     for(int i=0; i<Media::SCREEN_WIDTH;i++){
 
         for(int k=0; k<Media::SCREEN_HEIGHT; k++){
-            if(k == i-5){
+            if(k == std::round((-3.0/4.0)*(double)i+15)){
                 SDL_RenderDrawPoint(Media::ren, i, k);
             }
         }

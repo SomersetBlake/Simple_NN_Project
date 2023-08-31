@@ -9,6 +9,7 @@ public:
     ~Layer();
     std::vector<double> calculateLayerOutput(std::vector<double> inputs);
     double activationFunction(double weightedOutput);
+    double cost(double calculatedOutput, double expectedOutput);
     void setWeights(int inputIndex, int outputIndex, double value);
     void setBiases(int outputIndex, double value);
     int getInputNB();

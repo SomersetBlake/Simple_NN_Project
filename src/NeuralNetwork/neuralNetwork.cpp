@@ -1,4 +1,5 @@
 #include "../../include/NeuralNetwork/neuralNetwork.h"
+#include <vector>
 
 NeuralNetwork::NeuralNetwork(){
 }
@@ -57,4 +58,26 @@ void NeuralNetwork::updateWeights(){
             }
         }
     }
+}
+
+double NeuralNetwork::singleCost(Point data){
+    std::vector<double> output = calculateOutputs(data.getInputs());
+    int outputIndex= layers.size()-1;
+    double cost = 0;
+    
+    for(int i=0; i<output.size(); i++){
+        cost += layers[outputIndex].cost(output[i], data.getResults(i));
+    }
+    
+    return cost;
+    
+}
+
+double NeuralNetwork::networkCost(std::vector<Point> data){
+    double totalCost = 0;
+    for(int i=0; i<data.size(); i++){
+        totalCost += singleCost(data[i]);
+    }
+
+    return totalCost/data.size();
 }
