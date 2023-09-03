@@ -43,17 +43,56 @@ int NeuralNetwork::classifyOutput(std::vector<double> inputs){
     return index;
 }
 
+void NeuralNetwork::learnNetwork(std::vector<Point> data, double learnValue){
+    double oldCost = networkCost(data);
+    const double change = 0.000001;
+    
+    for(int layerNB = 0; layerNB<layers.size(); layerNB++){
+
+        //Gradient Descent for weights
+        for(int in=0; in<layers[layerNB].getInputNB(); in++){
+            for(int out=0; out<layers[layerNB].getOutputNB(); out++){
+                double newWeight = layers[layerNB].getWeight(in,out) + change;
+                layers[layerNB].setWeights(in, out, newWeight);
+                double costChange = networkCost(data) - oldCost;
+                layers[layerNB].weightCostGradient[in][out] = ((costChange)/change);
+                layers[layerNB].setWeights(in, out, newWeight - change);
+            }
+            
+        }
+        
+            
+        for(int out=0; out<layers[layerNB].getOutputNB(); out++){
+            double newBias = layers[layerNB].getBias(out) + change;
+            layers[layerNB].setBiases(out, newBias);
+            double costChange = networkCost(data) - oldCost;
+            layers[layerNB].biasCostGradient[out] = costChange/change;
+            layers[layerNB].setBiases(out, newBias - change);
+        }
+        
+    }
+    applyNetworkGradient(learnValue);
+}
+
+void NeuralNetwork::applyNetworkGradient(double learnValue){
+    for(int layerNB = 0; layerNB<layers.size(); layerNB++){
+        layers[layerNB].applyGradientDescent(learnValue);
+    }
+}
+
 void NeuralNetwork::updateWeights(){
     int biasesIndex = 0;
     int weightIndex = 0;
-    for(int i=0; i<nbOfLayers; i++){
+    for(int i=0; i<layers.size(); i++){
         int layerInput = layers[i].getInputNB();
         int layerOutput = layers[i].getOutputNB();
         for(int out=0; out<layerOutput; out++){
-            layers[i].setBiases(out, GLOBAL::biases[biasesIndex]);
+            //layers[i].setBiases(out, GLOBAL::biases[biasesIndex]);
+            GLOBAL::biases[biasesIndex] = layers[i].getBias(out);
             biasesIndex++;
             for(int in = 0; in < layerInput; in++){
-                layers[i].setWeights(in, out, GLOBAL::weights[weightIndex]);
+                //layers[i].setWeights(in, out, GLOBAL::weights[weightIndex]);
+                GLOBAL::weights[weightIndex] = layers[i].getWeight(in, out);
                 weightIndex++;
             }
         }

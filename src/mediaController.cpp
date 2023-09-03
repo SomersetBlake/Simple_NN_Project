@@ -93,7 +93,6 @@ void MediaController::drawCircles(){
         xPos = x_offset * (currentX);
         yPos = y_offset * (currentY);
 
-        std::cout<<"CurrentX: "<<currentX<<" CurrentY: "<<currentY<<std::endl;
         points[currentX][currentY]->setCoords(currentX, currentY);
         dataPoints.push_back(*(points[currentX][currentY]));
         if(points[currentX][currentY]->isDangerous()){
@@ -145,11 +144,11 @@ void MediaController::graphTest(){
     for(int i=0; i<xCount ; i++){
         for(int k=0; k<yCount; k++){
             if(classifyColor(i, k)){
-                SDL_SetRenderDrawColor(Media::ren, 255, 255, 255, 50);
-            }
-            else{
                 SDL_SetRenderDrawColor(Media::ren, 255, 0, 0, 50);
                 redPoints++;
+            }
+            else{
+                SDL_SetRenderDrawColor(Media::ren, 255, 255, 255, 50);
             }
             tempRect.x = i * rectXSize + startX;
             tempRect.y = k * rectYSize + startY;
@@ -158,6 +157,7 @@ void MediaController::graphTest(){
     }
     GLOBAL::NeuralData = redPoints;
     GLOBAL::AverageCost = testNetwork.networkCost(dataPoints);
+    testNetwork.learnNetwork(dataPoints, 0.05);
 }
 
 

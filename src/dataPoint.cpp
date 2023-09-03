@@ -28,7 +28,8 @@
     }
 
     void Point::calculateDanger(){
-        double y = (-3.0/4.0)*(double)x_length+15;
+        //double y = (-3.0/4.0)*(double)x_length+15;
+        double y=-1*((x_length)*(x_length))+30;
         if(y_length <= y){
             dangerous = true;
             results[0] = 0;

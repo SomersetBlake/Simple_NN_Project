@@ -12,6 +12,8 @@ public:
     ~NeuralNetwork();
     int classifyOutput(std::vector<double> inputs);
     double networkCost(std::vector<Point> data);
+    void learnNetwork(std::vector<Point>data, double learnValue);
+    void applyNetworkGradient(double learnValue);
     void updateWeights();
 
 private:
