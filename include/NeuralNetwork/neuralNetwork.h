@@ -22,4 +22,5 @@ private:
 
     double singleCost(Point data);
     std::vector<double> calculateOutputs(std::vector<double> inputs);
+    void learnAlgorithm(std::vector<Point>);
 };

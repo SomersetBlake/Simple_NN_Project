@@ -44,9 +44,29 @@ int NeuralNetwork::classifyOutput(std::vector<double> inputs){
 }
 
 void NeuralNetwork::learnNetwork(std::vector<Point> data, double learnValue){
+    //Spliting data into smaller batches for faster learning
+    int batchSize = data.size()/20;
+    for(int i=0; i<data.size(); i+=batchSize){
+        if(i + batchSize > data.size()){
+            std::vector<Point> batch(data.begin() + i,data.end());
+            learnAlgorithm(batch);
+        }else {
+            std::vector<Point> batch(data.begin() + i,data.begin() + i + batchSize);
+            learnAlgorithm(batch);
+        }
+        applyNetworkGradient(learnValue);
+    }
+}
+
+void NeuralNetwork::applyNetworkGradient(double learnValue){
+    for(int layerNB = 0; layerNB<layers.size(); layerNB++){
+        layers[layerNB].applyGradientDescent(learnValue);
+    }
+}
+
+void NeuralNetwork::learnAlgorithm(std::vector<Point>data){
     double oldCost = networkCost(data);
-    const double change = 0.000001;
-    
+    const double change = 0.0001;
     for(int layerNB = 0; layerNB<layers.size(); layerNB++){
 
         //Gradient Descent for weights
@@ -61,7 +81,6 @@ void NeuralNetwork::learnNetwork(std::vector<Point> data, double learnValue){
             
         }
         
-            
         for(int out=0; out<layers[layerNB].getOutputNB(); out++){
             double newBias = layers[layerNB].getBias(out) + change;
             layers[layerNB].setBiases(out, newBias);
@@ -70,13 +89,6 @@ void NeuralNetwork::learnNetwork(std::vector<Point> data, double learnValue){
             layers[layerNB].setBiases(out, newBias - change);
         }
         
-    }
-    applyNetworkGradient(learnValue);
-}
-
-void NeuralNetwork::applyNetworkGradient(double learnValue){
-    for(int layerNB = 0; layerNB<layers.size(); layerNB++){
-        layers[layerNB].applyGradientDescent(learnValue);
     }
 }
 
