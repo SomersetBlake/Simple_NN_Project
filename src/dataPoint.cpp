@@ -26,10 +26,17 @@
     double Point::getResults(int nb){
         return results[nb];
     }
+    
+    
+    std::vector<double> Point::getResults(){
+        return results;
+    }
+
 
     void Point::calculateDanger(){
         //double y = (-3.0/4.0)*(double)x_length+15;
         double y=-1*((x_length-2)*(x_length-2))+50;
+        //double y = -1*x_length+20;
         if(y_length <= y){
             dangerous = true;
             results[0] = 0;

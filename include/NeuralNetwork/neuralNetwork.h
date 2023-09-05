@@ -14,6 +14,8 @@ public:
     double networkCost(std::vector<Point> data);
     void learnNetwork(std::vector<Point>data, double learnValue);
     void applyNetworkGradient(double learnValue);
+    void resetNetworkGradient();
+    void applyBackpropagationGradient(Point data);
     void updateWeights();
 
 private:
@@ -22,5 +24,6 @@ private:
 
     double singleCost(Point data);
     std::vector<double> calculateOutputs(std::vector<double> inputs);
-    void learnAlgorithm(std::vector<Point>);
+    void learnAlgorithm(std::vector<Point> trainingData);
+    void learnBackpropagation(std::vector<Point> trainingData);
 };

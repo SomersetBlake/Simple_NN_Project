@@ -11,6 +11,7 @@ public:
     void setInputs();
     std::vector<double> getInputs();
     double getResults(int nb);
+    std::vector<double> getResults();
 
 private:
     int x_length;

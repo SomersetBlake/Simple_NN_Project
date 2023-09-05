@@ -157,7 +157,7 @@ void MediaController::graphTest(){
     }
     GLOBAL::NeuralData = redPoints;
     GLOBAL::AverageCost = testNetwork.networkCost(dataPoints);
-    testNetwork.learnNetwork(dataPoints, 0.05);
+    testNetwork.learnNetwork(dataPoints, 0.1);
 }
 
 
